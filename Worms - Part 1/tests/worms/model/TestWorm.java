@@ -19,24 +19,24 @@ public class TestWorm {
        
         @Test
         public void testInspectMovementTrue() {
-                assertEquals(true, testWorm1.inspectMovement(1));
+                assertEquals(true, testWorm1.isValidMovement(1));
         }
        
         @Test
         public void testInspectMovementFalse() {
                 testWorm1.setCurrentAP(0);
-                assertEquals(false, testWorm1.inspectMovement(0));
+                assertEquals(false, testWorm1.isValidMovement(0));
         }
        
         @Test
         public void testInspectTurnTrue(){
-                assertEquals(true,testWorm1.inspectTurn(Math.PI/2));
+                assertEquals(true,testWorm1.isValidTurn(Math.PI/2));
         }
        
         @Test
         public void testInspectTurnFalse(){
                 testWorm1.setCurrentAP(0);
-                assertEquals(false,testWorm1.inspectTurn(Math.PI/2));
+                assertEquals(false,testWorm1.isValidTurn(Math.PI/2));
         }
        
         @Test
@@ -58,65 +58,58 @@ public class TestWorm {
        
         @Test
         public void testInspectNameTrue(){
-                assertEquals(true,testWorm1.InspectName(testWorm1.getName()));
+                assertEquals(true,testWorm1.isValidName(testWorm1.getName()));
         }
        
         @Test
         public void testInspectNameFalseUpperCase(){
                 testWorm1.setName("worm");
-                assertEquals(false,testWorm1.InspectName(testWorm1.getName()));
+                assertEquals(false,testWorm1.isValidName(testWorm1.getName()));
         }
        
         @Test
         public void testInspectNameFalseCharacter(){
                 testWorm1.setName("Worm1");
-                assertEquals(false,testWorm1.InspectName(testWorm1.getName()));
+                assertEquals(false,testWorm1.isValidName(testWorm1.getName()));
         }
        
         @Test
         public void testInspectNameFalseLength(){
                 testWorm1.setName("S");
-                assertEquals(false,testWorm1.InspectName(testWorm1.getName()));
+                assertEquals(false,testWorm1.isValidName(testWorm1.getName()));
         }
        
         @Test
         public void testInspectPositionTrue(){
-                assertEquals(true,testWorm1.InspectPosition());
+                assertEquals(true,testWorm1.isValidPosition(testWorm1.getPosX(),testWorm1.getPosY()));
         }
        
         @Test
-        public void testInspectPositionFalseX(){
-                testWorm1.setPos_x(Double.NEGATIVE_INFINITY);
-                testWorm2.setPos_x(Double.POSITIVE_INFINITY);
+        public void testInspectPositionFalse(){
+                testWorm1.setPosX(Double.NEGATIVE_INFINITY);
+                testWorm2.setPosX(Double.POSITIVE_INFINITY);
+                testWorm1.setPosY(Double.NEGATIVE_INFINITY);
+                testWorm2.setPosY(Double.POSITIVE_INFINITY);
                
-                assertEquals(false,testWorm1.InspectPosition());
-                assertEquals(false,testWorm2.InspectPosition());
-        }
-       
-        @Test
-        public void testInspectPositionFalseY(){
-                testWorm1.setPos_y(Double.NEGATIVE_INFINITY);
-                testWorm2.setPos_y(Double.POSITIVE_INFINITY);
-               
-                assertEquals(false,testWorm1.InspectPosition());
-                assertEquals(false,testWorm2.InspectPosition());
+                assertEquals(false,testWorm1.isValidPosition(testWorm1.getPosX(),testWorm1.getPosY()));
+                assertEquals(false,testWorm2.isValidPosition(testWorm2.getPosX(),testWorm2.getPosY()));
         }
        
         @Test
         public void testInspectActionPointsTrue(){
-                assertEquals(true,testWorm1.InspectActionPoints());
+                assertEquals(true,testWorm1.isValidAP(testWorm1.getCurrentAP()));
         }
        
         @Test
         public void testInspectActionPointsFalse(){
                 testWorm1.setCurrentAP(testWorm1.getMaxAP() + 1);
-                assertEquals(false,testWorm1.InspectActionPoints());
+                assertEquals(false,testWorm1.isValidAP(testWorm1.getCurrentAP()));
         }
        
         @Test
         public void testInspectActionPointsNegative(){
                 testWorm1.setCurrentAP(-1);
-                assertEquals(false,testWorm1.InspectActionPoints());
+                assertEquals(false,testWorm1.isValidAP(testWorm1.getCurrentAP()));
         }
        
         @Test
@@ -124,8 +117,8 @@ public class TestWorm {
                 testWorm1.setAngle(Math.PI/4);
                 testWorm1.Move(1);
                
-                assertEquals(  testWorm1.getPos_x()  ,  ( 1 * Math.cos(Math.PI/4 ) + 1 ) , worms.util.Util.DEFAULT_EPSILON   );
-                assertEquals(  testWorm1.getPos_y()  ,  ( 1 * Math.sin(Math.PI/4 ) + 1 ) , worms.util.Util.DEFAULT_EPSILON   );
+                assertEquals(  testWorm1.getPosX()  ,  ( 1 * Math.cos(Math.PI/4 ) + 1 ) , worms.util.Util.DEFAULT_EPSILON   );
+                assertEquals(  testWorm1.getPosY()  ,  ( 1 * Math.sin(Math.PI/4 ) + 1 ) , worms.util.Util.DEFAULT_EPSILON   );
         }
        
         @Test (expected = IllegalArgumentException.class)
@@ -152,8 +145,8 @@ public class TestWorm {
                 testWorm1.setAngle(Math.PI/4);
                 double[] landingSpot = testWorm1.JumpStep(testWorm1.JumpTime());
                 testWorm1.Jump();
-                assertEquals(landingSpot[0], testWorm1.getPos_x(),worms.util.Util.DEFAULT_EPSILON );
-                assertEquals(landingSpot[1], testWorm1.getPos_y(),worms.util.Util.DEFAULT_EPSILON );
+                assertEquals(landingSpot[0], testWorm1.getPosX(),worms.util.Util.DEFAULT_EPSILON );
+                assertEquals(landingSpot[1], testWorm1.getPosY(),worms.util.Util.DEFAULT_EPSILON );
                 assertEquals(0,testWorm1.getCurrentAP(), worms.util.Util.DEFAULT_EPSILON);
         }
        
@@ -162,8 +155,8 @@ public class TestWorm {
                 testWorm1.setAngle(Math.PI*(3/4));
                 double[] landingSpot = testWorm1.JumpStep(testWorm1.JumpTime());
                 testWorm1.Jump();
-                assertEquals(landingSpot[0], testWorm1.getPos_x(),worms.util.Util.DEFAULT_EPSILON );
-                assertEquals(landingSpot[1], testWorm1.getPos_y(),worms.util.Util.DEFAULT_EPSILON );
+                assertEquals(landingSpot[0], testWorm1.getPosX(),worms.util.Util.DEFAULT_EPSILON );
+                assertEquals(landingSpot[1], testWorm1.getPosY(),worms.util.Util.DEFAULT_EPSILON );
                 assertEquals(0,testWorm1.getCurrentAP(), worms.util.Util.DEFAULT_EPSILON);
         }
        
@@ -171,8 +164,8 @@ public class TestWorm {
         public void testJumpUp(){
                 testWorm1.setAngle(Math.PI/2);
                 testWorm1.Jump();
-                assertEquals(1.0, testWorm1.getPos_x(),worms.util.Util.DEFAULT_EPSILON );
-                assertEquals(1.0, testWorm1.getPos_y(),worms.util.Util.DEFAULT_EPSILON );
+                assertEquals(1.0, testWorm1.getPosX(),worms.util.Util.DEFAULT_EPSILON );
+                assertEquals(1.0, testWorm1.getPosY(),worms.util.Util.DEFAULT_EPSILON );
                 assertEquals(0,testWorm1.getCurrentAP(), worms.util.Util.DEFAULT_EPSILON);
         }
        

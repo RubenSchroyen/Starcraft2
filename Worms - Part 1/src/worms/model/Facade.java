@@ -45,7 +45,7 @@ public class Facade implements IFacade {
         @Override
         public boolean canMove(Worm worm, int nbSteps) {
                
-                return worm.inspectMovement(nbSteps);
+                return worm.isValidMovement(nbSteps);
         }
         
         /**
@@ -54,8 +54,7 @@ public class Facade implements IFacade {
          * @try worm.Move(nbSteps) (we try to move the worm)
          * 
          * @throws ModelException
-         * 		- If the worm does not have enough AP left
-         * 		- If the amount of steps is invalid (smaller than zero)
+         * 		If worm.Move(nbSteps) throws IllegalArgumentException
          * 
          * @param worm
          * 		The newly created worm
@@ -70,12 +69,7 @@ public class Facade implements IFacade {
                         worm.Move(nbSteps);
                 }
                 catch (IllegalArgumentException exc){
-                        if (exc.getMessage() == "This is not a valid movement."){
-                                throw new ModelException("Insuffient Action Points!");
-                        }
-                        if (exc.getMessage() == "This is not a proper value for Steps") {
-                                throw new ModelException("You can not move like this!");
-                        }
+                   throw new ModelException(exc.getMessage());
                 }
                
         }
@@ -94,7 +88,7 @@ public class Facade implements IFacade {
          */
         @Override
         public boolean canTurn(Worm worm, double angle) {
-                return worm.inspectTurn(angle);
+                return worm.isValidTurn(angle);
         }
         
         /**
@@ -172,7 +166,7 @@ public class Facade implements IFacade {
         @Override
         public double getX(Worm worm) {
                
-                return worm.getPos_x();
+                return worm.getPosX();
         }
         
         /**
@@ -187,7 +181,7 @@ public class Facade implements IFacade {
         @Override
         public double getY(Worm worm) {
                
-                return worm.getPos_y();
+                return worm.getPosY();
         }
         
         /**
@@ -231,6 +225,7 @@ public class Facade implements IFacade {
          *
          * @throws ModelException 
          * 		If the radius of the worm is smaller than the minimal radius of 0.25 meters
+         * 		| worm.getRadius() < this.getMinimalRadius(worm)
          * 
          * @effect
          * 		The radius of the worm gets changed to its new radius if it is bigger than 0.25 meters
@@ -313,7 +308,7 @@ public class Facade implements IFacade {
          * @try worm.setName(newName) (We try to rename the worm)
          * 
          * @throws ModelException
-         * 		If the name is invalid (less than 2 characters, including other characters than spaces, single or double quotes and letters or not starting with an uppercase character)
+         * 		If worm.setName(newName) throws IllegalArgumentException
          */
         @Override
         public void rename(Worm worm, String newName) {
